@@ -1,4 +1,4 @@
-<tool id="enumerate_charges" name="Enumerate changes" version="0.1">
+<tool id="enumerate_charges" name="Enumerate charges" version="0.1">
     <description>calculated with Dimorphite DL and RDKit</description>
       <requirements>
         <requirement type="package" version="2019.09.2">rdkit</requirement>
