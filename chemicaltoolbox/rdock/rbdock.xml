@@ -16,13 +16,13 @@ ln -s $receptor_prm receptor.prm &&
 rbdock -i ligands.sdf -r receptor.prm -p dock.prm -n $num -o rdock_output &&
 cat rdock_output.sd
 #if $score:
-  | sdfilter -f'\$SCORE <= $score
+  | sdfilter -f'\$SCORE <= $score'
 #end if
 #if $nscore:
   | sdfilter -f'\$SCORE.norm <= $nscore'
 #end if
 #if $top
-  | sdsort -n -s -fSCORE output.sd | sdfilter -f'\$_COUNT <= $top'
+  | sdsort -n -s -fSCORE | sdfilter -f'\$_COUNT <= $top'
 #end if
 > '$output'
     ]]></command>
