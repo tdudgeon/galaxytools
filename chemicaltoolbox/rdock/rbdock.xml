@@ -13,15 +13,18 @@ ln -s $receptor_prm receptor.prm &&
 #else
   ln -s '$ligands' ligands.sdf &&
 #end if
-rbdock -i ligands.sdf -r receptor.prm -p dock.prm -n $num -o output &&
-sdsort -n -s -fSCORE output.sd |
+rbdock -i ligands.sdf -r receptor.prm -p dock.prm -n $num -o rdock_output &&
+cat rdock_output.sd
 #if $score:
-  sdfilter -f'\$SCORE <= $score' |
+  | sdfilter -f'\$SCORE <= $score
 #end if
 #if $nscore:
-  sdfilter -f'\$SCORE.norm <= $nscore' |
+  | sdfilter -f'\$SCORE.norm <= $nscore'
 #end if
-sdfilter -f'\$_COUNT <= $top' > '$output'
+#if $top
+  | sdsort -n -s -fSCORE output.sd | sdfilter -f'\$_COUNT <= $top'
+#end if
+> '$output'
     ]]></command>
 
     <configfiles>
@@ -36,7 +39,7 @@ RECEPTOR_FLEX 3.0
         <param type="data" name="active_site" format="rdock_as" label="Active site" help="Active site file"/>
         <param type="data" name="ligands" format="sdf,mol" label="Ligands" help="Ligands in SDF format (or single ligand in MOL format)"/>
         <param name="num" type="integer" value="10" label="Number of dockings" help="Number of poses to generate"/>
-        <param name="top" type="integer" value="1" label="Number of best poses" help="Number of best scoring poses to keep"/>
+        <param name="top" type="integer" value="1" optional="true" label="Number of best poses" help="Number of best scoring poses to keep"/>
         <param name="score" type="float" optional="true" label="Score filter"
                help="Exclude poses with score greater than this value"/>
         <param name="nscore" type="float" optional="true" label="Normalised score filter"
